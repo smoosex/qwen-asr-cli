@@ -1,6 +1,6 @@
 [project]
 name = "qwen-asr-cli"
-version = "0.1.0"
+version = "0.1.1"
 description = "CLI wrapper for Qwen3-ASR single-file transcription"
 readme = "README.md"
 license = { text = "MIT" }
