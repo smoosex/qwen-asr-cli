@@ -32,6 +32,12 @@ Install from PyPI via uv:
 uv tool install qwen-asr-cli
 ```
 
+Install from PyPI via pip:
+
+```bash
+python -m pip install qwen-asr-cli
+```
+
 Install from Homebrew (macOS and Linuxbrew):
 
 ```bash
@@ -44,45 +50,47 @@ brew install qwen-asr-cli
 Install default model:
 
 ```bash
-uv run qwen-asr install-model
+qwen-asr install-model
 ```
 
 Install the larger official model:
 
 ```bash
-uv run qwen-asr install-model --model Qwen/Qwen3-ASR-1.7B
+qwen-asr install-model --model Qwen/Qwen3-ASR-1.7B
 ```
 
 Transcribe an audio file:
 
 ```bash
-uv run qwen-asr transcribe ./demo.wav
+qwen-asr transcribe ./demo.wav
 ```
 
 Force Chinese/English language:
 
 ```bash
-uv run qwen-asr transcribe ./demo.wav --language zh
-uv run qwen-asr transcribe ./demo.wav --language en
+qwen-asr transcribe ./demo.wav --language zh
+qwen-asr transcribe ./demo.wav --language en
 ```
 
 Save output text:
 
 ```bash
-uv run qwen-asr transcribe ./demo.wav --output ./demo.txt
+qwen-asr transcribe ./demo.wav --output ./demo.txt
 ```
 
 Use a custom model path:
 
 ```bash
-uv run qwen-asr transcribe ./demo.wav --model /path/to/model
+qwen-asr transcribe ./demo.wav --model /path/to/model
 ```
 
 Check runtime:
 
 ```bash
-uv run qwen-asr doctor
+qwen-asr doctor
 ```
+
+For local development inside this repository, use `uv run qwen-asr ...`.
 
 ## Model Resolution Priority
 
@@ -100,9 +108,9 @@ If `--model` is omitted in `transcribe`, the CLI resolves model in this order:
 ## Commands
 
 ```bash
-uv run qwen-asr install-model --help
-uv run qwen-asr transcribe --help
-uv run qwen-asr doctor --help
+qwen-asr install-model --help
+qwen-asr transcribe --help
+qwen-asr doctor --help
 ```
 
 `--language` mapping:
