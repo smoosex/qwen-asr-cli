@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish_pypi:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+      contents: read
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      sdist_sha256: ${{ steps.meta.outputs.sdist_sha256 }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Run tests
+        run: uv run pytest -q
+
+      - name: Build package
+        run: uv build
+
+      - name: Collect release metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          SDIST=$(ls dist/*.tar.gz | head -n1)
+          SHA=$(sha256sum "$SDIST" | awk '{print $1}')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "sdist_sha256=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Publish to PyPI (Trusted Publisher)
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  update_homebrew_tap:
+    runs-on: ubuntu-latest
+    needs: publish_pypi
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate formula
+        run: |
+          python scripts/update_formula.py \
+            --version "${{ needs.publish_pypi.outputs.version }}" \
+            --sha256 "${{ needs.publish_pypi.outputs.sdist_sha256 }}" \
+            --output /tmp/qwen-asr-cli.rb
+
+      - name: Push formula to tap
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/smoosex/homebrew-tap.git" /tmp/homebrew-tap
+          mkdir -p /tmp/homebrew-tap/Formula
+          cp /tmp/qwen-asr-cli.rb /tmp/homebrew-tap/Formula/qwen-asr-cli.rb
+
+          cd /tmp/homebrew-tap
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet; then
+            echo "No formula changes to commit."
+            exit 0
+          fi
+
+          git add Formula/qwen-asr-cli.rb
+          git commit -m "qwen-asr-cli v${{ needs.publish_pypi.outputs.version }}"
+          git push

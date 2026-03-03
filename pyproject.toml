@@ -3,10 +3,23 @@ name = "qwen-asr-cli"
 version = "0.1.0"
 description = "CLI wrapper for Qwen3-ASR single-file transcription"
 readme = "README.md"
+license = { text = "MIT" }
 authors = [
     { name = "smoose", email = "kongzhh1101@gmail.com" }
 ]
 requires-python = ">=3.10"
+keywords = ["asr", "speech-to-text", "qwen", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+]
 dependencies = [
     "huggingface-hub>=0.36.2",
     "modelscope>=1.34.0",
@@ -14,6 +27,11 @@ dependencies = [
     "qwen-asr>=0.0.6",
     "torch>=2.10.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/smoosex/qwen-asr-cli"
+Repository = "https://github.com/smoosex/qwen-asr-cli"
+Issues = "https://github.com/smoosex/qwen-asr-cli/issues"
 
 [project.scripts]
 qwen-asr = "qwen_asr_cli.main:main"

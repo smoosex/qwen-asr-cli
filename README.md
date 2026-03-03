@@ -24,6 +24,21 @@ A lightweight CLI wrapper around `qwen-asr` for single-file speech transcription
 uv sync --dev
 ```
 
+## Install
+
+Install from PyPI via uv:
+
+```bash
+uv tool install qwen-asr-cli
+```
+
+Install from Homebrew (macOS and Linuxbrew):
+
+```bash
+brew tap smoosex/tap
+brew install qwen-asr-cli
+```
+
 ## Quick Start
 
 Install default model:
@@ -101,3 +116,13 @@ uv run qwen-asr doctor --help
 ```bash
 uv run pytest
 ```
+
+## Release
+
+1. Bump version in `pyproject.toml`.
+2. Push to `main`.
+3. Create and push a version tag, e.g. `v0.1.1`.
+4. GitHub Actions will:
+   - run tests
+   - publish to PyPI via Trusted Publisher
+   - update `smoosex/homebrew-tap` formula automatically
