@@ -1,0 +1,31 @@
+[project]
+name = "qwen-asr-cli"
+version = "0.1.0"
+description = "CLI wrapper for Qwen3-ASR single-file transcription"
+readme = "README.md"
+authors = [
+    { name = "smoose", email = "kongzhh1101@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "huggingface-hub>=0.36.2",
+    "modelscope>=1.34.0",
+    "platformdirs>=4.9.2",
+    "qwen-asr>=0.0.6",
+    "torch>=2.10.0",
+]
+
+[project.scripts]
+qwen-asr = "qwen_asr_cli.main:main"
+qwen-asr-cli = "qwen_asr_cli.main:main"
+
+[build-system]
+requires = ["uv_build>=0.10.7,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-mock>=3.15.1",
+    "ruff>=0.15.4",
+]
