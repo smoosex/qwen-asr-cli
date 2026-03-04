@@ -1,6 +1,6 @@
 [project]
 name = "qwen-asr-cli"
-version = "0.1.2"
+version = "0.1.3"
 description = "CLI wrapper for Qwen3-ASR single-file transcription"
 readme = "README.md"
 license = { text = "MIT" }
@@ -38,8 +38,11 @@ qwen-asr = "qwen_asr_cli.main:main"
 qwen-asr-cli = "qwen_asr_cli.main:main"
 
 [build-system]
-requires = ["uv_build>=0.10.7,<0.11.0"]
-build-backend = "uv_build"
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/qwen_asr_cli"]
 
 [dependency-groups]
 dev = [
