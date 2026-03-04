@@ -17,8 +17,6 @@ def validate_sha256(value: str) -> None:
 
 def build_formula(version: str, sha256: str) -> str:
     return f'''class QwenAsrCli < Formula
-  include Language::Python::Virtualenv
-
   desc "CLI wrapper for Qwen3-ASR single-file transcription"
   homepage "https://github.com/smoosex/qwen-asr-cli"
   url "https://files.pythonhosted.org/packages/source/q/qwen-asr-cli/qwen_asr_cli-{{version}}.tar.gz"
@@ -29,7 +27,13 @@ def build_formula(version: str, sha256: str) -> str:
   depends_on "ffmpeg"
 
   def install
-    virtualenv_install_with_resources
+    python = Formula["python@3.11"].opt_bin/"python3.11"
+    venv = libexec/"venv"
+    system python, "-m", "venv", venv
+    system venv/"bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"
+    system venv/"bin/python", "-m", "pip", "install", buildpath
+    bin.install_symlink venv/"bin/qwen-asr"
+    bin.install_symlink venv/"bin/qwen-asr-cli"
   end
 
   test do
